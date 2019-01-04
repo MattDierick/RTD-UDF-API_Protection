@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Create your own API for an inventory (movie, DVD, books …) &mdash; API protection 0.9 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configure the BIGIP APM" href="../BIGIP Configuration/Configure_API_protection_profile.html" />
+    <link rel="prev" title="Introduction" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> API protection
+          
+
+          
+            
+            <img src="../_static/f5-logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Create your own API for an inventory (movie, DVD, books …)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-the-api-project">Create the API project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connect-the-datasource">Connect the datasource</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-the-model">Create the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-your-api">Test your API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../BIGIP Configuration/Configure_API_protection_profile.html">Configure the BIGIP APM</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">API protection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Create your own API for an inventory (movie, DVD, books …)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/API_server_configuration/Create_your_own_API.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="create-your-own-api-for-an-inventory-movie-dvd-books">
+<h1>Create your own API for an inventory (movie, DVD, books …)<a class="headerlink" href="#create-your-own-api-for-an-inventory-movie-dvd-books" title="Permalink to this headline">¶</a></h1>
+<p>If you want, you can create your own API instead of using my Movie inventory API.</p>
+<div class="section" id="create-the-api-project">
+<h2>Create the API project<a class="headerlink" href="#create-the-api-project" title="Permalink to this headline">¶</a></h2>
+<p>First of all, you need to create the project. To do so, go to /root directory, and launch the following commands</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lb
+? What&#39;s the name of your application? (root) ENTER A NAME
+? Enter name of the directory to contain the project: PRESS ENTER TO SELECT DEFAULT FOLDER
+
+? Which version of LoopBack would you like to use? (Use arrow keys)
+    ❯ 3.x (Active Long Term Support)  &lt;-- SELECT 3.x
+    2.x (Maintenance Long Term Support)
+
+? What kind of application do you have in mind?
+    api-server (A LoopBack API server with local User auth)
+    ❯ empty-server (An empty LoopBack API, without any configured models or datasources) &lt;-- SELECT EMPTY SERVER
+    hello-world (A project containing a controller, including a single vanilla Message and a single remote method)
+    notes (A project containing a basic working example, including a memory database)
+</pre></div>
+</div>
+<p>Now the project is created. Go into the new directory.</p>
+</div>
+<div class="section" id="connect-the-datasource">
+<h2>Connect the datasource<a class="headerlink" href="#connect-the-datasource" title="Permalink to this headline">¶</a></h2>
+<p>Next, you need to specify where to store the datas. By default, there are stored in the memory. We have a MonogDB running in the same server. Let’s connect to it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lb datasource
+? Enter the datasource name: My_MongoDB
+? Select the connector <span class="k">for</span> My_MongoDB:
+    ❯ MongoDB <span class="o">(</span>supported by StrongLoop<span class="o">)</span>
+? Connection String url to override other settings <span class="o">(</span>eg: mongodb://username:password@hostname:port/database<span class="o">)</span>:
+? host: localhost
+? port: <span class="m">27017</span>
+? user:
+? password: <span class="o">[</span>hidden<span class="o">]</span> &lt;-- NO PASSWORD
+? database: My_MongoDB
+? Install loopback-connector-mongodb@^3.6.0 <span class="o">(</span>Y/n<span class="o">)</span> Y
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-the-model">
+<h2>Create the model<a class="headerlink" href="#create-the-model" title="Permalink to this headline">¶</a></h2>
+<p>Last step is to create the model of the API.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lb model
+? Enter the model name: My_DVD
+? Select the datasource to attach My_DVD to: My_MongoDB (mongodb)
+? Select models base class PersistedModel
+? Expose My_DVD via the REST API? Yes
+? Custom plural form (used to build REST URL):
+? Common model or server only? common
+Let&#39;s add some My_DVD properties now.
+
+Enter an empty property name when done.
+? Property name: name
+? Property type: string
+? Required? Yes
+? Default value[leave blank for none]:
+</pre></div>
+</div>
+<p>Repeeat theses steps for every property (description, rate, location …) When finished, just click ENTER</p>
+</div>
+<div class="section" id="test-your-api">
+<h2>Test your API<a class="headerlink" href="#test-your-api" title="Permalink to this headline">¶</a></h2>
+<p>Start the server, and test it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ node .
+</pre></div>
+</div>
+<p>Connect in RDP to the Windows Client and open chrome. Connect to <a class="reference external" href="http://10.1.20.5:3000/explorer">http://10.1.20.5:3000/explorer</a>
+You should see your API. Now, you can add entries in the POST /movies (or any other name you put)</p>
+<img alt="../_images/Loopback_UI.png" class="align-center" src="../_images/Loopback_UI.png" />
+<p>Test your API with Postman. Open Postman and do a GET to the right URI</p>
+<img alt="../_images/Postman_UI.png" class="align-center" src="../_images/Postman_UI.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Congratulation, your API is up and running, but there is neither protection nor authentication in front of it. Connect to the BIGIP and configure the API protection profile.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../BIGIP Configuration/Configure_API_protection_profile.html" class="btn btn-neutral float-right" title="Configure the BIGIP APM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Matthieu DIERICK
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

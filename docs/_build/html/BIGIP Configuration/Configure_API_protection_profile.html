@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configure the BIGIP APM &mdash; API protection 0.9 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Create your own API for an inventory (movie, DVD, books …)" href="../API_server_configuration/Create_your_own_API.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> API protection
+          
+
+          
+            
+            <img src="../_static/f5-logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../API_server_configuration/Create_your_own_API.html">Create your own API for an inventory (movie, DVD, books …)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configure the BIGIP APM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#import-the-openapi-file">Import the OpenAPI file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-the-per-request-policy">Modify the Per Request policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assign-the-profile-to-the-vs">Assign the profile to the VS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-your-api-protection-with-apm">Test your API protection with APM</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">API protection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Configure the BIGIP APM</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/BIGIP Configuration/Configure_API_protection_profile.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configure-the-bigip-apm">
+<h1>Configure the BIGIP APM<a class="headerlink" href="#configure-the-bigip-apm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="import-the-openapi-file">
+<h2>Import the OpenAPI file<a class="headerlink" href="#import-the-openapi-file" title="Permalink to this headline">¶</a></h2>
+<p>In Access &gt; API Protection, create a new profile.</p>
+<img alt="../_images/Profile_API.png" class="align-center" src="../_images/Profile_API.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will need the OpenAPI file from the API server. There is a command line in order to extract the Swagger file from the Loopback server. But to simplify the demo, you can find this swagger file on this link : <a class="reference external" href="https://app.swaggerhub.com/apis/F5EMEASSA/My_movie_store/1.0.0">https://app.swaggerhub.com/apis/F5EMEASSA/My_movie_store/1.0.0</a> If you want to extract by yourself, this is the command line below.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lb export-api-def -o My_movies.yaml
+</pre></div>
+</div>
+<p>Now, you should see the API configuration extracted from the swagger file. All is configured automatically.</p>
+<img alt="../_images/Profile_API_2.png" class="align-center" src="../_images/Profile_API_2.png" />
+<p>Click on Access Control tab and edit the Per Request Policy.</p>
+</div>
+<div class="section" id="modify-the-per-request-policy">
+<h2>Modify the Per Request policy<a class="headerlink" href="#modify-the-per-request-policy" title="Permalink to this headline">¶</a></h2>
+<p>You have to configure the PRP for the authentication. API supports HTTP (Authorization header for Basic auth, and Oauth v2).
+Terminate the branch HTTP by an Allow.</p>
+<img alt="../_images/PRP1.png" class="align-center" src="../_images/PRP1.png" />
+</div>
+<div class="section" id="assign-the-profile-to-the-vs">
+<h2>Assign the profile to the VS<a class="headerlink" href="#assign-the-profile-to-the-vs" title="Permalink to this headline">¶</a></h2>
+<p>Assign the new profile to your VS. It is a new profile, not part of Access configuration.</p>
+<img alt="../_images/VS_profile.png" class="align-center" src="../_images/VS_profile.png" />
+</div>
+<div class="section" id="test-your-api-protection-with-apm">
+<h2>Test your API protection with APM<a class="headerlink" href="#test-your-api-protection-with-apm" title="Permalink to this headline">¶</a></h2>
+<p>Now, open Postman, and test with a Basic Authorization. Put any values for the username and password.</p>
+<img alt="../_images/Postman_basic_auth.png" class="align-center" src="../_images/Postman_basic_auth.png" />
+<p>Second test, use Oauthv2 with OpenID connect. The APM has a configuration to validate JWT token from AzureAD. In this lab, we use the F5 corporate AzureAD tenant, so you can test with your own corporate account.
+Select Oauth 2.0, and GET NEW ACCESS TOKEN, click on Request Token. Fill the logon pages fields.</p>
+<img alt="../_images/AzureAD.png" class="align-center" src="../_images/AzureAD.png" />
+<p>Now, you should have a token. Select it into the menu “Available Tokens” and click on “Preview Request”. And send the request. It should pass.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Now you can configure every branch (GET, POST …) for every URI in order to allow or block requests. I let you discover the solution and test it by yourself. Enjoy.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../API_server_configuration/Create_your_own_API.html" class="btn btn-neutral float-left" title="Create your own API for an inventory (movie, DVD, books …)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Matthieu DIERICK
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
