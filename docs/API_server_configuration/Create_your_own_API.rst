@@ -70,7 +70,7 @@ Last step is to create the model of the API.
     ? Required? Yes
     ? Default value[leave blank for none]:
 
-Repeeat theses steps for every property (description, rate, location ...) When finished, just click ENTER
+Repeat theses steps for every property (description, rate, location ...) When finished, just click ENTER
 
 Test your API
 -------------
