@@ -31,7 +31,7 @@ Connect in SSH into the Linux server. And launch these commands :
 
     $ sudo su
     $ cd /root/My_Movies/
-    $ node .
+    $ node . &
 
 The nodeJS server should start and should see these lines :
 
